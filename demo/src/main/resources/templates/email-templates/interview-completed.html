@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { margin: 0; background: #f5f7fb; font-family: Arial, sans-serif; color: #1f2a39; }
+        .container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+        .card { background: #ffffff; border: 1px solid #dae2f0; border-radius: 12px; overflow: hidden; }
+        .header { background: #395a9a; color: #ffffff; padding: 20px 24px; }
+        .header h2 { margin: 0; font-size: 22px; }
+        .content { padding: 24px; }
+        .intro { margin-top: 0; font-size: 15px; color: #2a3f5b; }
+        .label { font-weight: 700; color: #3a4e6b; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+        .value { margin-top: 4px; margin-bottom: 14px; font-size: 16px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header"><h2 th:text="${emailTitle}">Interview Completed</h2></div>
+        <div class="content">
+            <p class="intro">Hello <span th:text="${recipientName}">Team</span>,</p>
+            <p class="intro" th:text="${introText}">The interview result has been recorded.</p>
+
+            <div class="label">Applicant</div>
+            <div class="value"><strong th:text="${applicantName}">Applicant Name</strong> for <span th:text="${role}">Role</span></div>
+
+            <div class="label">Status</div>
+            <div class="value" th:text="${status}">Completed</div>
+
+            <div class="label">Scheduled Date</div>
+            <div class="value" th:text="${scheduledDateLabel}">Friday, April 25, 2026</div>
+
+            <div class="label">Scheduled Time</div>
+            <div class="value" th:text="${scheduledTimeLabel}">9:00 AM - 10:00 AM (local time)</div>
+
+            <div class="label">Notes</div>
+            <div class="value" th:text="${notes}">-</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

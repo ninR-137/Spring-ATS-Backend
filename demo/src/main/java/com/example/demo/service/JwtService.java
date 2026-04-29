@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -49,10 +51,14 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+        String subject = userDetails instanceof User user
+                ? user.getEmail()
+                : userDetails.getUsername();
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -60,8 +66,12 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final String tokenSubject = extractUsername(token);
+        final String expectedSubject = userDetails instanceof User user
+                ? user.getEmail()
+                : userDetails.getUsername();
+
+        return tokenSubject.equals(expectedSubject) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -82,7 +92,31 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        String normalizedSecret = normalizeSecret(secretKey);
+        byte[] keyBytes;
+
+        try {
+            keyBytes = Decoders.BASE64.decode(normalizedSecret);
+        } catch (IllegalArgumentException base64Error) {
+            try {
+                keyBytes = Decoders.BASE64URL.decode(normalizedSecret);
+            } catch (IllegalArgumentException base64UrlError) {
+                keyBytes = normalizedSecret.getBytes(StandardCharsets.UTF_8);
+            }
+        }
+
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private String normalizeSecret(String rawSecret) {
+        String secret = rawSecret == null ? "" : rawSecret.trim();
+        if (secret.length() >= 2) {
+            char first = secret.charAt(0);
+            char last = secret.charAt(secret.length() - 1);
+            if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+                secret = secret.substring(1, secret.length() - 1).trim();
+            }
+        }
+        return secret;
     }
 }

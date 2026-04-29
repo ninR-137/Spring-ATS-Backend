@@ -3,7 +3,16 @@ package com.example.demo.service;
 import com.example.demo.dto.LoginUserDto;
 import com.example.demo.dto.RegisterUserDto;
 import com.example.demo.dto.VerifyUserDto;
+import com.example.demo.exception.EmailAlreadyExistsException;
+import com.example.demo.exception.EmailNotFoundException;
+import com.example.demo.exception.InvalidVerificationCodeException;
+import com.example.demo.exception.UnverifiedException;
+import com.example.demo.exception.UsernameAlreadyExistsException;
+import com.example.demo.exception.VerificationCodeExpiredException;
+import com.example.demo.model.Role;
+import com.example.demo.model.RoleName;
 import com.example.demo.model.User;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,37 +27,62 @@ import java.util.Random;
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
     public AuthenticationService(
             UserRepository userRepository,
+            RoleRepository roleRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             EmailService emailService
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
     }
 
     public User signup(RegisterUserDto input) {
+        if (checkIfEmailExists(input.getEmail())) {
+            throw new EmailAlreadyExistsException("Email is already registered");
+        }
+        if (checkIfUsernameExists(input.getUsername())) {
+            throw new UsernameAlreadyExistsException("Username is already taken");
+        }
+
         User user = new User(input.getUsername(), input.getEmail(), passwordEncoder.encode(input.getPassword()));
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
         user.setEnabled(false);
+        user.getRoles().add(getOrCreateRole(RoleName.ROLE_USER));
         sendVerificationEmail(user);
+
         return userRepository.save(user);
+    }
+
+    private Role getOrCreateRole(RoleName roleName) {
+        return roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
+    }
+
+    private boolean checkIfEmailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    private boolean checkIfUsernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
     public User authenticate(LoginUserDto input) {
         User user = userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EmailNotFoundException("User not found"));
 
         if (!user.isEnabled()) {
-            throw new RuntimeException("Account not verified. Please verify your account.");
+            throw new UnverifiedException("Account not verified. Please verify your account.");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -64,8 +98,13 @@ public class AuthenticationService {
         Optional<User> optionalUser = userRepository.findByEmail(input.getEmail());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            //Check if user is already verified
+            if (user.isEnabled()) {
+                throw new InvalidVerificationCodeException("Account is already verified");
+            }
+            
             if (user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
-                throw new RuntimeException("Verification code has expired");
+                throw new VerificationCodeExpiredException("Verification code has expired");
             }
             if (user.getVerificationCode().equals(input.getVerificationCode())) {
                 user.setEnabled(true);
@@ -73,10 +112,10 @@ public class AuthenticationService {
                 user.setVerificationCodeExpiresAt(null);
                 userRepository.save(user);
             } else {
-                throw new RuntimeException("Invalid verification code");
+                throw new InvalidVerificationCodeException("Invalid verification code");
             }
         } else {
-            throw new RuntimeException("User not found");
+            throw new EmailNotFoundException("User not found");
         }
     }
 
@@ -85,14 +124,14 @@ public class AuthenticationService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.isEnabled()) {
-                throw new RuntimeException("Account is already verified");
+                throw new InvalidVerificationCodeException("Account is already verified");
             }
             user.setVerificationCode(generateVerificationCode());
             user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
             sendVerificationEmail(user);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new EmailNotFoundException("User not found");
         }
     }
 

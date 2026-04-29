@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { margin: 0; background: #f3f6fb; font-family: Arial, sans-serif; color: #1e2938; }
+        .container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+        .card { background: #ffffff; border: 1px solid #d8e1ec; border-radius: 12px; overflow: hidden; }
+        .header { background: #1f4368; color: #ffffff; padding: 20px 24px; }
+        .header h2 { margin: 0; font-size: 22px; }
+        .content { padding: 24px; }
+        .intro { margin-top: 0; font-size: 15px; color: #2c3f53; }
+        .label { font-weight: 700; color: #3b5066; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+        .value { margin-top: 4px; margin-bottom: 14px; font-size: 16px; }
+        .footer { border-top: 1px solid #e8edf4; padding-top: 16px; margin-top: 14px; color: #5a6b7e; font-size: 13px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header"><h2 th:text="${emailTitle}">Candidate Hired</h2></div>
+        <div class="content">
+            <p class="intro">Hello <span th:text="${recipientName}">Team</span>,</p>
+            <p class="intro" th:text="${introText}">The applicant below has been marked as HIRED.</p>
+
+            <div class="label">Applicant</div>
+            <div class="value"><strong th:text="${applicantName}">Applicant Name</strong></div>
+
+            <div class="label">Role</div>
+            <div class="value" th:text="${role}">Role</div>
+
+            <div class="label">Facility</div>
+            <div class="value" th:text="${facilityName}">Facility Name</div>
+
+            <div class="footer" th:if="${isApplicantCopy}">
+                Please watch for onboarding instructions from our team.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

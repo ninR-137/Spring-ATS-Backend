@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { margin: 0; background: #f7faf6; font-family: Arial, sans-serif; color: #1e2e1f; }
+        .container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+        .card { background: #ffffff; border: 1px solid #d9e7d6; border-radius: 12px; overflow: hidden; }
+        .header { background: #3e7d34; color: #ffffff; padding: 20px 24px; }
+        .header h2 { margin: 0; font-size: 22px; }
+        .content { padding: 24px; }
+        .intro { margin-top: 0; font-size: 15px; color: #2b3f2d; }
+        .label { font-weight: 700; color: #38513a; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+        .value { margin-top: 4px; margin-bottom: 14px; font-size: 16px; }
+        .footer { border-top: 1px solid #e5eee2; padding-top: 16px; margin-top: 14px; color: #4f6452; font-size: 13px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header"><h2 th:text="${emailTitle}">Orientation Scheduled</h2></div>
+        <div class="content">
+            <p class="intro">Hello <span th:text="${recipientName}">Team</span>,</p>
+            <p class="intro" th:text="${introText}">Orientation details are ready. Please review the schedule below.</p>
+
+            <div class="label">Applicant</div>
+            <div class="value"><strong th:text="${applicantName}">Applicant Name</strong> for <span th:text="${role}">Role</span></div>
+
+            <div class="label">Facility</div>
+            <div class="value" th:text="${facilityName}">Facility Name</div>
+
+            <div class="label">Date</div>
+            <div class="value" th:text="${scheduledDateLabel}">Friday, April 25, 2026</div>
+
+            <div class="label">Time</div>
+            <div class="value" th:text="${scheduledTimeLabel}">1:00 PM - 3:00 PM (local time)</div>
+
+            <div th:if="${isOnSite}">
+                <div class="label">On-site Location</div>
+                <div class="value" th:text="${facilityLocation}">Facility address</div>
+            </div>
+
+            <div th:if="${!isOnSite}">
+                <div class="label">Meeting Link</div>
+                <div class="value" th:text="${meetingLink}">https://meet.example.com/orientation</div>
+            </div>
+
+            <div class="label">Required Documents</div>
+            <div class="value" th:text="${documentsRequired}">ID, Tax form</div>
+
+            <div class="label">Notes</div>
+            <div class="value" th:text="${notes}">-</div>
+
+            <div class="footer">
+                Please arrive or join 10 minutes early and have your required documents ready.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+:root{
+    --header-height: 64px;
+    --primary: #2563eb;
+}
+
+html{scroll-behavior:smooth}
+
+/* Ensure sections clear fixed header when jumping to anchors */
+section{scroll-margin-top:var(--header-height)}
+
+/* Top Get Started button in nav */
+.nav-get-started{
+    display:inline-block;
+    margin-left:12px;
+    padding:8px 12px;
+    border-radius:6px;
+    background-color:var(--primary);
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* Mobile nav list improvements */
+.nav-links-mob{
+    display:none;
+}
+
+/* Mobile open state (JS toggles .open) */
+.nav-links-mob.open{
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    background:var(--background, #fff);
+    padding-top:calc(var(--header-height) + 8px);
+    z-index:1200;
+    gap:0.25rem;
+}
+
+.nav-links-mob a{display:block;padding:12px 18px;border-bottom:1px solid rgba(0,0,0,0.06);color:inherit;text-decoration:none}
+.nav-links-mob a:hover{text-decoration:underline}
+
+.get-started-mob{display:block;margin:8px 12px;padding:10px;border-radius:8px;background:var(--primary);color:#fff;text-align:center;font-weight:600}
+
+@media (min-width:769px){
+    .get-started-mob{display:none}
+}
+
+@media (max-width:768px){
+    /* hide desktop top CTA on mobile to avoid duplicate */
+    .nav-get-started{display:none}
+}
+
+/* Slight padding for CTA section so scroll target isn't flush to top */
+.cta-container{padding-top:12px}
+
+/* Auth modal styles */
+.auth-modal{display:none;position:fixed;inset:0;z-index:1300;align-items:center;justify-content:center}
+.auth-modal.open{display:flex}
+.auth-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5)}
+.auth-card{position:relative;background:var(--card,#fff);width:min(540px,90vw);border-radius:12px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.12);z-index:2}
+.auth-close{position:absolute;top:8px;right:10px;border:0;background:transparent;font-size:22px;line-height:1;color:#333;cursor:pointer}
+.auth-tabs{display:flex;gap:8px;margin-bottom:12px}
+.auth-tabs .tab-btn{flex:1;padding:8px 10px;border-radius:8px;border:1px solid transparent;background:transparent;cursor:pointer}
+.auth-tabs .tab-btn.active{background:var(--primary);color:#fff}
+.auth-body{display:block}
+.auth-form{display:flex;flex-direction:column;gap:10px}
+.auth-form label{display:flex;flex-direction:column;font-size:0.9rem;color:var(--muted,#444)}
+.auth-form input{padding:10px;border-radius:8px;border:1px solid #e5e7eb}
+.auth-form .btn{align-self:flex-start;padding:10px 16px}
+
+@media (max-width:520px){
+    .auth-card{width:94vw;padding:16px}
+    .auth-tabs .tab-btn{padding:10px 8px;font-size:0.95rem}
+    .auth-form input{padding:12px}
+}

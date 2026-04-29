@@ -1,0 +1,12 @@
+body.dark-mode {
+    --color-bg: #0a0a0a;
+    --color-text: #ffffff;
+    --color-text-light: #999999;
+    --color-border: #1f1f1f;
+    --color-accent: #ffffff;
+}
+
+body.dark-mode {
+    background-color: #0a0a0a !important;
+}
+

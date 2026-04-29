@@ -3,13 +3,17 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginUserDto;
 import com.example.demo.dto.RegisterUserDto;
+import com.example.demo.dto.ResendVerificationDto;
 import com.example.demo.dto.VerifyUserDto;
 import com.example.demo.model.User;
 import com.example.demo.responses.LoginResponse;
+import com.example.demo.responses.MessageResponse;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.JwtService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RequestMapping("/auth")
 @RestController
@@ -24,7 +28,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<User> register(@Valid @RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
         return ResponseEntity.ok(registeredUser);
     }
@@ -39,21 +43,25 @@ public class AuthenticationController {
 
     @PostMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto) {
-        try {
-            authenticationService.verifyUser(verifyUserDto);
-            return ResponseEntity.ok("Account verified successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        authenticationService.verifyUser(verifyUserDto);
+        MessageResponse response = new MessageResponse("Account verified successfully");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/resend")
     public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
-        try {
-            authenticationService.resendVerificationCode(email);
-            return ResponseEntity.ok("Verification code sent");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        authenticationService.resendVerificationCode(email);
+        MessageResponse response = new MessageResponse("Verification code sent");
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/resend-body")
+    public ResponseEntity<?> resendVerificationCodeBody(@Valid @RequestBody ResendVerificationDto resendVerificationDto) {
+        authenticationService.resendVerificationCode(resendVerificationDto.getEmail());
+        MessageResponse response = new MessageResponse("Verification code sent");
+        return ResponseEntity.ok(response);
+    }
+    
+
+
 }

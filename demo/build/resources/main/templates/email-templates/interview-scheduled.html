@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { margin: 0; background: #f6f8fb; font-family: Arial, sans-serif; color: #1c2834; }
+        .container { max-width: 680px; margin: 0 auto; padding: 24px 16px; }
+        .card { background: #ffffff; border: 1px solid #dbe4ef; border-radius: 12px; overflow: hidden; }
+        .header { background: #1f6aa5; color: #ffffff; padding: 20px 24px; }
+        .header h2 { margin: 0; font-size: 22px; }
+        .content { padding: 24px; }
+        .intro { margin-top: 0; font-size: 15px; color: #24374a; }
+        .label { font-weight: 700; color: #334a62; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+        .value { margin-top: 4px; margin-bottom: 14px; font-size: 16px; }
+        .pill { display: inline-block; margin-bottom: 14px; background: #e8f3ff; color: #145289; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+        .footer { border-top: 1px solid #e8edf4; padding-top: 16px; margin-top: 14px; color: #5a6b7e; font-size: 13px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header"><h2 th:text="${emailTitle}">Interview Scheduled</h2></div>
+        <div class="content">
+            <p class="intro">Hello <span th:text="${recipientName}">Team</span>,</p>
+            <p class="intro" th:text="${introText}">An interview has been scheduled. Please review the details below.</p>
+
+            <div class="pill" th:text="${sessionTypeLabel}">Video</div>
+
+            <div class="label">Applicant</div>
+            <div class="value"><strong th:text="${applicantName}">Applicant Name</strong> for <span th:text="${role}">Role</span></div>
+
+            <div class="label">Facility</div>
+            <div class="value" th:text="${facilityName}">Facility Name</div>
+
+            <div class="label">Date</div>
+            <div class="value" th:text="${scheduledDateLabel}">Friday, April 25, 2026</div>
+
+            <div class="label">Time</div>
+            <div class="value" th:text="${scheduledTimeLabel}">9:00 AM - 10:00 AM (local time)</div>
+
+            <div th:if="${isOnSite}">
+                <div class="label">On-site Location</div>
+                <div class="value" th:text="${facilityLocation}">Facility address</div>
+            </div>
+
+            <div th:if="${!isOnSite}">
+                <div class="label">Meeting Link</div>
+                <div class="value" th:text="${meetingLink}">https://meet.example.com/room</div>
+
+                <div class="label">Meeting ID</div>
+                <div class="value" th:text="${meetingId}">123456</div>
+
+                <div class="label">Meeting Password</div>
+                <div class="value" th:text="${meetingPassword}">abcd1234</div>
+            </div>
+
+            <div class="label">Notes</div>
+            <div class="value" th:text="${notes}">-</div>
+
+            <div class="footer">
+                Please arrive or join 10 minutes early to avoid delays.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

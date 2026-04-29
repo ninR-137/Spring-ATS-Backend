@@ -1,7 +1,13 @@
 package com.example.demo.config;
 
 
+import com.example.demo.model.Role;
+import com.example.demo.model.AdminRequestStatus;
+import com.example.demo.model.RoleName;
+import com.example.demo.repository.AdminRequestRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,5 +49,33 @@ public class ApplicationConfiguration {
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
+    }
+
+    @Bean
+    CommandLineRunner seedRolesAndSyncAdminAccess(
+            RoleRepository roleRepository,
+            UserRepository userRepository,
+            AdminRequestRepository adminRequestRepository
+    ) {
+        return args -> {
+            for (RoleName roleName : RoleName.values()) {
+                roleRepository.findByName(roleName)
+                        .orElseGet(() -> roleRepository.save(new Role(roleName)));
+            }
+
+            Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                    .orElseGet(() -> roleRepository.save(new Role(RoleName.ROLE_ADMIN)));
+
+            adminRequestRepository.findAllByStatusOrderByCreatedAtAsc(AdminRequestStatus.APPROVED)
+                    .forEach(adminRequest -> userRepository.findById(adminRequest.getUser().getId())
+                            .ifPresent(user -> {
+                                boolean isAdmin = user.getRoles().stream()
+                                        .anyMatch(role -> role.getName() == RoleName.ROLE_ADMIN);
+                                if (!isAdmin) {
+                                    user.getRoles().add(adminRole);
+                                    userRepository.save(user);
+                                }
+                            }));
+        };
     }
 }
