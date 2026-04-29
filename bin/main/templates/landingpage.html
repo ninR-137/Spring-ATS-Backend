@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notelify</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/darkmode.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/themetoggle.css}">
+    <link rel="stylesheet" th:href="@{/css/landing-fixes.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Notelify<Applet></Applet></a>
+            <ul class="nav-links">
+                <li><a href="#homepage" class="nav-home">Home</a></li>
+                <li><a href="#features" class="nav-cta">Features</a></li>
+                <li><a href="#content" class="nav-about">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button type="button" class="btn btn-primary" id="auth-modal" data-target="#auth-modal">Get Started</button>
+                <div class="theme-toggle" title="Toggle dark mode">
+                    <svg class="theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="theme-icon moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="nav-overlay"></div>
+
+    <header id="homepage" class="hero">
+        <div class="hero-container">
+            <h1>Minimal Design<br>Maximum Impact</h1>
+            <p>Create stunning notes with our clean, simple website.</p>
+            <div class="hero-buttons">
+                <a href="#features" class="btn btn-primary">Learn More</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Everything You Need To Know</h2>
+                <p>Interesting Note Features that Flows.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <h3>Simplified</h3>
+                    <p>Optimized for stability and precision.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <h3>Responsive</h3>
+                    <p>Looks perfect on every device with fluid layouts and flexible grids.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3>Secure</h3>
+                    <p>With built in security measures in mind for data protection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="12 19 7 7 3 12"/>
+                            <path d="M21 12c0 5.523-4.477 10-10 10S1 17.523 1 12"/>
+                        </svg>
+                    </div>
+                    <h3>Scalable</h3>
+                    <p>Grows with your needs and can handle increasing amounts of content.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        </svg>
+                    </div>
+                    <h3>Customizable</h3>
+                    <p>Easy to modify and extend to match your imagination and ideas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                    </div>
+                    <h3>Sharable</h3>
+                    <p>Can be accessible and sharable for others to see.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="content" class="content">
+        <div class="content-container">
+            <div class="content-image">
+                <img th:src="@{/images/notes-app2.png}" alt="">
+            </div>
+            <div class="content-text">
+                <h2>Notelify<br>Designed for Everyone</h2>
+                <p>Notelify, a simple note application that is designed for users to create different types of notes made for users to capture and organize you're own task that has its own features and functionalities when it is deemed necessary. </p>
+                <p>It ensures for users to experience and create a minimal but simple designs that is interactable and precise.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="cta">
+        <div class="cta-container">
+            <h2>Ready to Create<br>Something Special?</h2>
+            <p>Create your own notes with every possible imaginations that you can come up!</p>
+            <a href="https://thegoatofnote.netlify.app/" target="_blank" class="btn btn-primary">Prototype</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026  Notelify. All rights reserved.</p>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script th:src="@{/js/authmodal.js}" defer></script>
+    <script th:src="@{/js/darkmode.js}" defer></script>
+    <script th:src="@{/js/scroll.js}" defer></script>
+</body>
+</html>
